@@ -3,6 +3,7 @@
 
 
 using namespace std;
+int const nbPoints(125);
 
 struct Particule
 {
@@ -26,10 +27,15 @@ class Simulator: public Application
 {
 private:
     Program* program = NULL;
+
     Program* compute = NULL;
     Renderer* renderer = NULL;
+    Renderer* traceRenderer = NULL;
+ 
     Computer* computer = NULL;
     Buffer* particules = NULL;
+    Buffer* lignes = NULL;
+ 
     Buffer* velocities = NULL;
     
 public:
@@ -49,7 +55,9 @@ void Simulator::update(int elapsedTime)
 
 void Simulator::render()
 {
-     renderer->render(PRIMITIVE_POINTS, 100);//100 zonex memoire pr 100 pts
+     renderer->render(PRIMITIVE_POINTS, nbPoints);//100 zonex memoire pr 100 pts
+     traceRenderer->render(PRIMITIVE_LINES, 26);
+ 
 }
 
  /*
@@ -62,12 +70,25 @@ void Particule::Particule()
 void Simulator::setup()
 {   
     setClearColor(0.95f, 0.95f, 0.95f, 1.0f); 
-        int i=-1;
-        int const tailleTableau(1024);
-        Particule pp[tailleTableau];
-        for(i=-1; i<tailleTableau; i++){
+        int i=0;
+        int j=0;
+        int k=0;
+        int l=0;
 
-            pp[i] = Particule(vec3(i, i, i), vec3(0));  //On crée l'objet particule qu'on met dans un tableau
+        Particule pp[nbPoints];
+        for(i=0; i<5; i++){
+            //pp[i] = Particule(vec3(i, 10+i, 0), vec3(0));  //On crée l'objet particule qu'on met dans un tableau
+            for(j=0; j<5; j++){
+                for(k=0; k<5; k++){
+                    pp[l] = Particule(vec3(i, j, k), vec3(1,0,0));
+                    l++;
+                }
+                /*for(k=-1; k<5; k++){
+                    pp[i+2] = Particule(vec3(i, 0, 10+i), vec3(0));
+                }*/
+
+            }
+
        /* Particule(vec3(1, 10, 1), vec3(0)),
         Particule(vec3(-1, 10, 1), vec3(0)),
         Particule(vec3(1, 10, -1), vec3(0)),
@@ -95,17 +116,65 @@ void Simulator::setup()
 
     velocities = new Buffer(4, 3, FLOAT, veloc);*/
 
+    float ll[] = {
+        0,-0.1,-0.1,
+        0,5,0,
+
+        0,-0.1,-0.1,
+        10,-0.1,-0.1,
+
+        0,5,0,
+        10,5,0,
+
+        10,-0.1,-0.1,
+        10,5,0,
+ 
+        10,0,-0.1,
+        10,0,5,
+
+        0,0,5,//
+        10,0,5,
+
+        10,0,5,
+        10,6,5,
+
+        10,0,5,
+        10,0,0,
+
+        0,0,5,//
+        0,-0.1,-0.1,
+
+        10,5,0,
+        10,6,5,
+
+        0,0,5,//
+        0,6,5,//
+
+        10,6,5,
+        0,6,5,//
+
+        0,5,0,
+        0,6,5,//
+       
+    };
+ 
+    
+    lignes = new Buffer(ll, sizeof(ll));
+ 
     program = new Program();
     program->addShader(Shader::fromFile("shaders/perspective.vert"));
     program->addShader(Shader::fromFile("shaders/black.frag"));
     program->link();
 
     renderer = program->createRenderer();
-
+    traceRenderer = program->createRenderer();
+ 
     renderer->setVertexData("vertex", particules, TYPE_FLOAT, 0, 3, sizeof(Particule));
+    traceRenderer->setVertexData("vertex", lignes, TYPE_FLOAT, 0, 3, sizeof(float)*3);
+ 
 
-    mat4 projection = perspective(90.0f, 640.0/480.0, 0.1, 4096);
-    mat4 view = lookat(vec3(0, 5, -10), vec3(0, 5, 0), vec3(0, 1, 0));
+    mat4 projection = perspective(90.0f, 640.0/480.0, 0.1, 500);
+    mat4 view = lookat(vec3(2, 5, -10), vec3(0, 5, 0), vec3(0, 10, 0)); //le pts de vu de la caméra
 
     renderer->setMatrix("projectionMatrix", projection);
     renderer->setMatrix("modelViewMatrix", view);

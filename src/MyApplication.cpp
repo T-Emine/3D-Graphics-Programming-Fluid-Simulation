@@ -48,7 +48,7 @@ void MyApplication::setup()
 
     renderer = program->createRenderer();
 
-    mat4 projectionMatrix = perspective(1.0f, 640.0f/480, 0.001f, 100.0f); //angle de la caméra en reduisant on fait un zoom juste élé 1
+    mat4 projectionMatrix = perspective(10.0f, 640.0f/480, 0.001f, 100.0f); //angle de la caméra en reduisant on fait un zoom juste élé 1
                                                                            //en horizontale
     mat4 viewMatrix = lookat(vec3(15, 15, 15), vec3(0, 0.1, 0), vec3(0, 1, 0));//modif du 2eme vec pour camera en vertical
     mat4 modelMatrix = rotate(angle, 0.0f, 1.0f, 0.0f);
