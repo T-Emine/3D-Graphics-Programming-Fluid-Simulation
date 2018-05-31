@@ -42,12 +42,7 @@ void main()
         p.x=10;
         v.x=-3;
     }
-/*
-    if(p.z < 0) {
-        p.z=0;
-        v.z=v.z;
-    }
-*/
+    
     particles[index].velocity = vec4(v, 1.0);
     particles[index].position = vec4(p, 1.0);
 }

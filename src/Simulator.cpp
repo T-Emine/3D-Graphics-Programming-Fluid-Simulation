@@ -17,7 +17,7 @@ struct Particule
     }
 
     Particule()  
-     {
+    {
         position = vec4(0.0f, 0.0f, 0.0f, 0.0f);
         velocity = vec4(0.0f, 0.0f, 0.0f, 0.0f);
     } 
@@ -70,6 +70,7 @@ void Particule::Particule()
 void Simulator::setup()
 {   
     setClearColor(0.95f, 0.95f, 0.95f, 1.0f); 
+
         int i=0;
         int j=0;
         int k=0;
@@ -77,44 +78,15 @@ void Simulator::setup()
 
         Particule pp[nbPoints];
         for(i=0; i<5; i++){
-            //pp[i] = Particule(vec3(i, 10+i, 0), vec3(0));  //On crée l'objet particule qu'on met dans un tableau
             for(j=0; j<5; j++){
                 for(k=0; k<5; k++){
                     pp[l] = Particule(vec3(i, j, k), vec3(1,0,0));
                     l++;
                 }
-                /*for(k=-1; k<5; k++){
-                    pp[i+2] = Particule(vec3(i, 0, 10+i), vec3(0));
-                }*/
-
             }
-
-       /* Particule(vec3(1, 10, 1), vec3(0)),
-        Particule(vec3(-1, 10, 1), vec3(0)),
-        Particule(vec3(1, 10, -1), vec3(0)),
-        Particule(vec3(-1, 10, -1), vec3(0)),
-                Particule(vec3(-2, 10, -2), vec3(0))*/
         }
 
-    
-
-    /*vec3 parti[] = {
-        vec3(1, 10, 1),
-        vec3(-1, 10, 1),
-        vec3(1, 10, -1),
-        vec3(-1, 10, -1)
-    };*/
-
     particules = new Buffer(pp, sizeof(pp));
-
-    /*vec3 veloc[] = {
-        vec3(0),
-        vec3(0),
-        vec3(0),
-        vec3(0)
-    };
-
-    velocities = new Buffer(4, 3, FLOAT, veloc);*/
 
     float ll[] = {
         0,-0.1,-0.1,
